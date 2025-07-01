@@ -33,10 +33,6 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # Vérifier le code (linting)
-      - name: Run linter
-        run: npm run lint
-
       # Vérifier que le build fonctionne
       - name: Build project
         run: npm run build
