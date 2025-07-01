@@ -1,0 +1,40 @@
+{
+  "name": "alto-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Alto monorepo with React TypeScript frontend and NestJS backend",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:front\" \"npm run dev:back\"",
+    "dev:front": "cd Front && npm run dev",
+    "dev:back": "cd Back && npm run start:dev",
+    "build": "npm run build:front && npm run build:back",
+    "build:front": "cd Front && npm run build",
+    "build:back": "cd Back && npm run build",
+    "start": "npm run start:back",
+    "start:back": "cd Back && npm run start:prod",
+    "install:all": "npm install && cd Front && npm install && cd ../Back && npm install",
+    "lint": "npm run lint:front && npm run lint:back",
+    "lint:front": "cd Front && npm run lint",
+    "lint:back": "cd Back && npm run lint",
+    "test": "npm run test:front && npm run test:back",
+    "test:front": "cd Front && npm test",
+    "test:back": "cd Back && npm run test",
+    "clean": "rm -rf alto-front/dist Front/build Back/dist node_modules Front/node_modules Back/node_modules"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "monorepo",
+    "react",
+    "typescript",
+    "nestjs",
+    "alto"
+  ],
+  "author": "Nassim, Jonathan",
+  "license": "MIT"
+}
