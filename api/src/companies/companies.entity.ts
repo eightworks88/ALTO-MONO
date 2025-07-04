@@ -1,10 +1,12 @@
 import { Exclude } from 'class-transformer';
+import { Mission } from 'src/missions/mission.entity';
+import { User } from 'src/users/user.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 export enum UserRole {
@@ -13,75 +15,27 @@ export enum UserRole {
   ADMIN = 'admin'
 }
 
-@Entity('users')
-export class User {
+@Entity('companies')
+export class Company {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  email: string;
+  name: string;
 
   @Column()
-  @Exclude()
-  password: string;
-
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-  })
-  role: UserRole;
-
-  // Company fields
-  @Column({ nullable: true })
-  companyName: string;
-
-  @Column({ nullable: true })
   siret: string;
 
-  @Column({ nullable: true })
-  companyAddress: string;
+  @Column()
+  sector: string;
 
-  @Column({ nullable: true })
-  companyPhone: string;
+  @Column()
+  logo: string;
 
-  // Freelance fields
-  @Column({ nullable: true })
-  firstName: string;
+  @OneToMany(() => User, user => user.company)
+  users: User[];
 
-  @Column({ nullable: true })
-  lastName: string;
-
-  @Column({ nullable: true })
-  title: string;
-
-  @Column({ type: 'text', nullable: true })
-  bio: string;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  rate: number;
-
-  @Column('simple-array', { nullable: true })
-  skills: string[];
-
-  @Column({ nullable: true })
-  experience: number;
-
-  @Column({ nullable: true })
-  availability: string;
-
-  @Column({ nullable: true })
-  location: string;
-
-  @Column({ default: true })
-  isAvailable: boolean;
-
-  @Column({ nullable: true })
-  profilePicture: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => Mission, mission => mission.company)
+  missions: Mission[];
 
 }

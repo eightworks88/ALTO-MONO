@@ -1,15 +1,13 @@
-import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
+import { Company } from 'src/companies/companies.entity';
+import { Freelance } from 'src/freelance/freelance.entity';
 import {
-  BeforeInsert,
   Column,
-  CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-import { Mission } from '../missions/mission.entity';
 
 export enum UserRole {
   COMPANY = 'company',
@@ -35,57 +33,10 @@ export class User {
   })
   role: UserRole;
 
-  // Company fields
-  @Column({ nullable: true })
-  companyName: string;
+  @ManyToOne(() => Company, company => company.users, { nullable: true, onDelete: 'SET NULL' })
+  company: Company;
 
-  @Column({ nullable: true })
-  siret: string;
-
-  @Column({ nullable: true })
-  companyAddress: string;
-
-  @Column({ nullable: true })
-  companyPhone: string;
-
-  // Freelance fields
-  @Column({ nullable: true })
-  firstName: string;
-
-  @Column({ nullable: true })
-  lastName: string;
-
-  @Column({ nullable: true })
-  title: string;
-
-  @Column({ type: 'text', nullable: true })
-  bio: string;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  rate: number;
-
-  @Column('simple-array', { nullable: true })
-  skills: string[];
-
-  @Column({ nullable: true })
-  experience: number;
-
-  @Column({ nullable: true })
-  availability: string;
-
-  @Column({ nullable: true })
-  location: string;
-
-  @Column({ default: true })
-  isAvailable: boolean;
-
-  @Column({ nullable: true })
-  profilePicture: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToOne(() => Freelance, freelance => freelance.user, { nullable: true, onDelete: 'SET NULL' })
+  freelance: Freelance;
 
 }

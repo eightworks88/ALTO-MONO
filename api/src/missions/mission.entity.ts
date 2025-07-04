@@ -8,14 +8,14 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { User } from '../user.entity';
-import { Invoice } from './invoice.entity';
+import { User } from '../users/user.entity';
+import { Company } from 'src/companies/companies.entity';
+import { Freelance } from 'src/freelance/freelance.entity';
 
 export enum MissionStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-  PROFILE_PROPOSED = 'profile_proposed',
-  IN_PROGRESS = 'in_progress',
+  PROCESSING = 'processing',
+  REVIEW = 'review',
+  ONGOING = 'ongoing',
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
 }
@@ -44,13 +44,10 @@ export class Mission {
   description: string;
 
   @Column()
-  budget: string;
-
-  @Column()
   duration: string;
 
-  @Column('simple-array', { nullable: true })
-  skills: string[];
+  @Column({ nullable: true })
+  skills: string;
 
   @Column({
     type: 'enum',
@@ -69,12 +66,9 @@ export class Mission {
   @Column({
     type: 'enum',
     enum: MissionStatus,
-    default: MissionStatus.DRAFT,
+    default: MissionStatus.PROCESSING,
   })
   status: MissionStatus;
-
-  @Column({ default: 0 })
-  progress: number;
 
   @Column({ type: 'date', nullable: true })
   startDate: Date;
@@ -82,30 +76,9 @@ export class Mission {
   @Column({ type: 'date', nullable: true })
   endDate: Date;
 
-  @Column({ default: 0 })
-  applicants: number;
+  @ManyToOne(() => Company, (company) => company.missions)
+  company: Company;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  // Relations
-  @ManyToOne(() => User, (user) => user.companyMissions)
-  @JoinColumn({ name: 'companyId' })
-  company: User;
-
-  @Column()
-  companyId: number;
-
-  @ManyToOne(() => User, (user) => user.freelanceMissions, { nullable: true })
-  @JoinColumn({ name: 'selectedFreelanceId' })
-  selectedFreelance: User;
-
-  @Column({ nullable: true })
-  selectedFreelanceId: number;
-
-  @OneToMany(() => Invoice, (invoice) => invoice.mission)
-  invoices: Invoice[];
+  @ManyToOne(() => Freelance, (freelance) => freelance.missions, { nullable: true })
+  selectedFreelance: Freelance;
 }
