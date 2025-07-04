@@ -5,7 +5,8 @@ node_modules/
 dist/
 
 # env files
-.env
+api/.env
+front/.env
 .env.*
 
 # system files
